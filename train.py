@@ -31,10 +31,11 @@ Y_train = np.array(steering_measurements)
 
 # build a simple regression network for testing data
 from keras.models import Sequential
-from keras.layers import Flatten, Dense
+from keras.layers import Flatten, Dense, Lambda
 
 model = Sequential()
-model.add(Flatten(input_shape=X_train[0].shape))
+model.add(Lambda(lambda x: (x / 255.0) - 0.5, input_shape=X_train[0].shape))
+model.add(Flatten())
 model.add(Dense(1))
 
 model.compile(loss="mse", optimizer="adam")

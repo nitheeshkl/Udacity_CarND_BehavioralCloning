@@ -24,6 +24,12 @@ for line in lines:
     images.append(img)
     steering_angle = float(line[3])
     steering_measurements.append(steering_angle)
+    # augment training data
+    img_flipped = np.fliplr(img)
+    steering_angle_flipped = -steering_angle
+    images.append(img_flipped)
+    steering_measurements.append(steering_angle_flipped)
+
 
 # create training data
 X_train = np.array(images)
@@ -49,4 +55,4 @@ model.add(Dense(1))
 model.compile(loss="mse", optimizer="adam")
 model.fit(X_train, Y_train, validation_split=0.2, shuffle=True, nb_epoch=5)
 
-model.save("./model_lenet.h5")
+model.save("./model_lenet_augmented_data.h5")

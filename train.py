@@ -19,16 +19,35 @@ with open(dataset_csv_file) as csvfile:
 images = []
 steering_measurements = []
 for line in lines:
-    img_path = line[0]
-    img = cv2.imread(img_path)
-    images.append(img)
-    steering_angle = float(line[3])
-    steering_measurements.append(steering_angle)
+    img_center_path = line[0]
+    img_left_path = line[1]
+    img_right_path = line[2]
+    img_center = cv2.imread(img_center_path)
+    img_left = cv2.imread(img_left_path)
+    img_right = cv2.imread(img_right_path)
+    steering_angle_center = float(line[3])
+    correction = 0.2
+    steering_angle_left = steering_angle_center + correction
+    steering_angle_right = steering_angle_center - correction
+    images.append(img_center)
+    steering_measurements.append(steering_angle_center)
+    images.append(img_left)
+    steering_measurements.append(steering_angle_left)
+    images.append(img_right)
+    steering_measurements.append(steering_angle_right)
     # augment training data
-    img_flipped = np.fliplr(img)
-    steering_angle_flipped = -steering_angle
-    images.append(img_flipped)
-    steering_measurements.append(steering_angle_flipped)
+    img_center_flipped = np.fliplr(img_center)
+    steering_angle_center_flipped = -steering_angle_center
+    img_left_flipped = np.fliplr(img_left)
+    steering_angle_left_flipped = -steering_angle_left
+    img_right_flipped = np.fliplr(img_right)
+    steering_angle_right_flipped = -steering_angle_right
+    images.append(img_center_flipped)
+    steering_measurements.append(steering_angle_center_flipped)
+    images.append(img_left_flipped)
+    steering_measurements.append(steering_angle_left_flipped)
+    images.append(img_right_flipped)
+    steering_measurements.append(steering_angle_right_flipped)
 
 
 # create training data
@@ -54,6 +73,6 @@ model.add(Dense(84))
 model.add(Dense(1))
 
 model.compile(loss="mse", optimizer="adam")
-model.fit(X_train, Y_train, validation_split=0.2, shuffle=True, nb_epoch=5)
+model.fit(X_train, Y_train, validation_split=0.2, shuffle=True, nb_epoch=3)
 
-model.save("./model_lenet_augmented_data_cropped.h5")
+model.save("./model_lenet_augmented_data_cropped_multicam.h5")

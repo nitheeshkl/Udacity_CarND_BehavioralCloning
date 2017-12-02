@@ -108,3 +108,5 @@ ENV/
 # project sim & dataset
 linux_sim/
 sample_data/
+driving_data/
+test_drive/

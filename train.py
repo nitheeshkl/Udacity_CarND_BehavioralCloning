@@ -1,15 +1,22 @@
 import csv
 import cv2
 import numpy as np
-
+import matplotlib.pyplot as plt
 
 # dataset files
 dataset_dir = "./driving_data"
 dataset_csv_file = dataset_dir + "/driving_log.csv"
+additional_dataset_dir = "./additional_driving_data"
+additional_dataset_csv_file = dataset_dir + "/driving_log.csv"
 
 # read ground truth
 lines = []
 with open(dataset_csv_file) as csvfile:
+    reader = csv.reader(csvfile)
+    for line in reader:
+        lines.append(line)
+
+with open(additional_dataset_csv_file) as csvfile:
     reader = csv.reader(csvfile)
     for line in reader:
         lines.append(line)
@@ -73,6 +80,18 @@ model.add(Dense(84))
 model.add(Dense(1))
 
 model.compile(loss="mse", optimizer="adam")
-model.fit(X_train, Y_train, validation_split=0.2, shuffle=True, nb_epoch=3)
+history_object = model.fit(X_train, Y_train, validation_split=0.2, shuffle=True, nb_epoch=5)
 
-model.save("./model_lenet_augmented_data_cropped_multicam.h5")
+model.save("./model_lenet_augmented_data_cropped_multicam_additional_data_4.h5")
+
+### print the keys contained in the history object
+print(history_object.history.keys())
+
+### plot the training and validation loss for each epoch
+plt.plot(history_object.history['loss'])
+plt.plot(history_object.history['val_loss'])
+plt.title('model mean squared error loss')
+plt.ylabel('mean squared error loss')
+plt.xlabel('epoch')
+plt.legend(['training set', 'validation set'], loc='upper right')
+plt.show()

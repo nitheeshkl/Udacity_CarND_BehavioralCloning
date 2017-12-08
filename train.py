@@ -82,9 +82,9 @@ model.add(Dense(10))
 model.add(Dense(1))
 
 model.compile(loss="mse", optimizer="adam")
-history_object = model.fit(X_train, Y_train, validation_split=0.2, shuffle=True, nb_epoch=15)
+history_object = model.fit(X_train, Y_train, validation_split=0.2, shuffle=True, nb_epoch=20)
 
-model.save("./model_nvidia_augmented_data_cropped_multicam_additional_data_4.h5")
+model.save("./model_nvidia_augmented_data_cropped_multicam_additional_data_8.h5")
 
 ### print the keys contained in the history object
 print(history_object.history.keys())

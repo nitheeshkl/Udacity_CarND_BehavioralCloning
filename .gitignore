@@ -109,4 +109,5 @@ ENV/
 linux_sim/
 sample_data/
 driving_data/
-test_drive/
+additional_driving_data/
+test_drive*
